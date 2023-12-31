@@ -1,16 +1,25 @@
 import streamlit as st
 import streamlit.components.v1 as components
-import networkx as nx
-from pyvis.network import Network
+
+from src.backend.trivial_graph import get_trivial_graph_html
+from src.backend.pdf_to_text import pdf_to_text, text_to_reference_section
+
 
 st.title("🍇 Grape")
 
-graph = nx.Graph()
-graph.add_node("Node A")
-graph.add_node("Node B")
-graph.add_edge("Node A", "Node B")
+st.header("PDF Text Extractor")
+pdf_file = st.file_uploader("Upload a PDF file", type=["pdf"])
 
-net = Network(height="500px", width="100%", bgcolor="#222222", font_color="white")
-net.from_nx(graph)
-html = net.generate_html()
-components.html(html, height=500)
+if pdf_file is not None:
+    with st.spinner("Extracting text..."):
+        text = pdf_to_text(pdf_file)
+    ref_sec = text_to_reference_section(text)
+    st.subheader("Reference section?")
+    st.text(ref_sec)
+
+
+st.markdown(
+    """ ___ """
+)
+
+components.html(get_trivial_graph_html(), height=500)
