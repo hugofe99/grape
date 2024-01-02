@@ -2,10 +2,10 @@ import streamlit as st
 import streamlit.components.v1 as components
 
 from src.backend.pdf import pdf_to_text
-from src.backend.papers.paper import Paper
-from src.backend.graphs.network import PaperNetwork, NetworkConstants
+from src.backend.graphs.network import NetworkConstants
 
 from src.frontend.resources.backend import paper_title_to_network_html
+
 
 st.title("🍇 Grape")
 
