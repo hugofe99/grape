@@ -1,5 +1,9 @@
 {
     "cSpell.words": [
+        "networkx",
+        "pdfplumber",
+        "pyvis",
+        "semanticscholar",
         "streamlit"
     ]
 }
