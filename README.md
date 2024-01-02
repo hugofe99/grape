@@ -9,8 +9,10 @@ streamlit run src/frontend/main.py
 ```
 
 ## 🛣️ Roadmap
- - [ ] Fix padding issue of graph
  - [ ] References timeline
- - [ ] Migrate networkx to [streamlit-agraph](https://github.com/ChrisDelClea/streamlit-agraph?ref=blog.streamlit.io)?
  - [ ] Tests
  - [ ] Documentation
+ - [x] Fix padding issue of graph
+    > Handled graph as agraph component instead of pyvis html
+ - [x] Migrate networkx to [streamlit-agraph](https://github.com/ChrisDelClea/streamlit-agraph?ref=blog.streamlit.io)?
+    > Implemented PaperGraph method to export as agraph component
