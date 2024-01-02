@@ -5,6 +5,7 @@ from src.backend.graphs.config import get_default_network, NetworkConstants
 from semanticscholar.Paper import Paper as SemanticScholarPaper
 from streamlit_agraph import agraph, Config, Node, Edge, ConfigBuilder
 from streamlit.components.v1.components import CustomComponent
+import math
 
 
 class PaperNetwork:
@@ -31,7 +32,7 @@ class PaperNetwork:
     def _paper_to_description(
         self, paper: Paper | SemanticScholarPaper, _words_per_line: int = 9
     ) -> str:
-        def multiline_text(text: str, _words_per_line: int):
+        def multiline_text(text: str, _words_per_line: int = _words_per_line):
             if not text:
                 return ""
             multiline_text = []
@@ -41,16 +42,16 @@ class PaperNetwork:
                     multiline_text.append("\n")
             return " ".join(multiline_text)
 
-        title = paper.title
-        abstract = multiline_text(paper.abstract, _words_per_line)
+        title = multiline_text(paper.title)
+        abstract = multiline_text(paper.abstract)
         paper_id = paper.paperId
         authors = multiline_text(
-            ", ".join([author["name"] for author in paper.authors]), _words_per_line
+            ", ".join([author["name"] for author in paper.authors])
         )
         year = paper.year
         citation_count = paper.citationCount
 
-        description = f"Title:\n{title}\nAbstract:\n{abstract}\n\nPaper ID: {paper_id}\nAuthors: {authors}\nYear: {year}\nCitation Count: {citation_count}"
+        description = f"Title:{title}\nPaper ID:{paper_id}\nAuthors:{authors}\nYear:{year}\nCitation Count:{citation_count}\nAbstract:\n{abstract}"
         return description
 
     def _generate_network(self) -> None:
@@ -61,7 +62,7 @@ class PaperNetwork:
             n_id=self.paper.paperId,
             label=self.paper.title,
             title=self._paper_to_description(self.paper),
-            size=self.network_constants.PAPER_SIZE,
+            size=math.log(self.paper.citationCount + 2) * 2,
         )
 
         for ref in self.paper.get_references():
@@ -69,7 +70,7 @@ class PaperNetwork:
                 n_id=ref.paperId,
                 label=f"{ref.title[:10]}...",
                 title=self._paper_to_description(ref),
-                size=self.network_constants.REF_SIZE,
+                size=math.log(ref.citationCount + 2),
             )
             self.network.add_edge(
                 source=ref.paperId,
